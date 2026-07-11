@@ -1,0 +1,20 @@
+[project]
+name = "flywheel"
+version = "0.1.0"
+description = "A self-improving analyst agent: a small local LLM answers questions over public UK energy data via sandboxed code execution, and is post-trained (rejection-sampling SFT, then DPO) on its own verified trajectories to raise its solve rate round over round."
+requires-python = ">=3.10"
+
+dependencies = [
+    
+]
+
+# Build system - how pip installs the package
+# You rarely need to change this
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+# Tells setuptools your package code lives in src/
+# Without this, it won't find right location
+[tool.setuptools.packages.find]
+where = ["src"]

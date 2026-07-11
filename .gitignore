@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.DS_Store
+.mlx_cache/
+
+data/*
+!data/.gitkeep
+
+trajectories/*
+!trajectories/.gitkeep
