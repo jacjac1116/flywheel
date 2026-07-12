@@ -5,7 +5,10 @@ description = "A self-improving analyst agent: a small local LLM answers questio
 requires-python = ">=3.10"
 
 dependencies = [
-    
+    "mlx-lm",
+    "pydantic",
+    "pytest",
+    "dotenv",
 ]
 
 # Build system - how pip installs the package
