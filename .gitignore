@@ -10,4 +10,4 @@ data/*
 !data/.gitkeep
 
 trajectories/*
-!trajectories/.gitkeep
+!trajectories/.gitkeep*.sh # or just Miniforge3-MacOSX-arm64.sh if you want to be narrower
