@@ -8,14 +8,14 @@ def test_crashing_code():
     assert result.success == False
     assert result.timed_out == False
     assert "ValueError: bad column" in result.stderr
-    assert result.stdout is None
+    assert result.stdout == ""
 
 def test_timeout_code():
     result = run_code("while True: pass", timeout=1)
     assert result.success == False
     assert result.timed_out == True
     assert "timed out" in result.stderr
-    assert result.stdout is None
+    assert result.stdout == ""
 
 def test_environment_stripped():
     os.environ['SECRET_TEST'] = 'should_not_leak'
@@ -29,13 +29,13 @@ def test_environment_stripped():
 def test_cwd_is_isolated_scratch_dir():
     result = run_code("import os; print(os.listdir('.'))", timeout=5)
     assert result.success == True
-    assert result.stdout.strip() == "[]"  # empty scratch dir, not my repo's files
+    assert result.stdout.strip() == "['carbon_2020-01-01_2025-12-31.parquet']"  #  scratch dir only contains parquet file, not my repo's files
 
 def test_successful_code():
     result = run_code("print(2 + 2)", timeout=5)
     assert result.success == True
     assert result.timed_out == False
-    assert result.stderr is None
+    assert result.stderr == ""
     assert result.stdout.strip() == "4"
 
 

@@ -9,6 +9,10 @@ dependencies = [
     "pydantic",
     "pytest",
     "dotenv",
+    "pyprojroot",
+    "pyarrow",
+    "pandas",
+    "ipykernel",
 ]
 
 # Build system - how pip installs the package

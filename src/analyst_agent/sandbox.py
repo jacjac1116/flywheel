@@ -2,17 +2,25 @@ from dataclasses import dataclass
 import subprocess
 import sys
 import tempfile
+import shutil
+from analyst_agent.core import get_configs
 
 @dataclass
 class ExecutionResult:
     success: bool
-    stdout: str | None
-    stderr: str | None
+    stdout: str 
+    stderr: str 
     timed_out: bool
+    code: str
 
 def run_code(code: str, timeout: int) -> ExecutionResult:
 
     with tempfile.TemporaryDirectory() as scratch_dir:
+
+        configs = get_configs()
+        carbon_data = configs['carbon_data']
+        # Copy the content of path into scratch_dir
+        shutil.copy2(carbon_data, scratch_dir)
 
         try:
             result = subprocess.run([sys.executable, "-c", code], 
@@ -26,19 +34,22 @@ def run_code(code: str, timeout: int) -> ExecutionResult:
         except subprocess.TimeoutExpired as e:
             return ExecutionResult(success=False, 
                                 timed_out=True, 
-                                stderr=str(e), 
-                                stdout=None)
+                                stderr=str(e),
+                                stdout="",
+                                code=code)
         else:
             if result.stderr:
                 return ExecutionResult(success=False,
                                     timed_out=False,
                                     stderr=result.stderr,
-                                    stdout=None)
+                                    stdout=result.stdout,
+                                    code=code)
             else:
                 return ExecutionResult(success=True,
                                     timed_out=False,
-                                    stderr=None,
-                                    stdout=result.stdout)
+                                    stderr=result.stderr,
+                                    stdout=result.stdout,
+                                    code=code)
         
 
 
