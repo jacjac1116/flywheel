@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    runs-on: macos-latest            # ← the one non-obvious line: WHY macOS specifically
+    runs-on: macos-latest            # mlx-lm is Apple's framework and only runs on Apple silicon. If test suite ever imports anything that imports mlx, ubuntu-latest would fail at import time.
 
     steps:
       - uses: actions/checkout@v4    # step 1: get your repo's code onto the runner
@@ -22,4 +22,6 @@ jobs:
         run: pip install -e .        # step 3: same command you run locally
 
       - name: Run tests
+        env:
+            CARBON_DATA: data/samples/carbon_sample.parquet # create env var to be able to access to sample data
         run: pytest tests -v         # step 4: same command you run locally

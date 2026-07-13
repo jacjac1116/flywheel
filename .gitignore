@@ -7,6 +7,8 @@ __pycache__/
 .mlx_cache/
 
 data/*
+!data/samples/
+
 !data/.gitkeep
 
 trajectories/*
