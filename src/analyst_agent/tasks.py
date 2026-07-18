@@ -12,7 +12,7 @@ class Task:
     id: int
     tier: int
     question: str
-    answer: Callable[[pd.DataFrame], any]
+    answer: Callable[[pd.DataFrame], Any]
 
 @dataclass
 class Grader:
@@ -37,6 +37,8 @@ task2 = Task(
     answer= lambda df: df[df["index"] == "high"]["forecast"].mean()
     )
 
+tasks = [task1, task2]
+
 def grade(generated_result: ExecutionResult, task: Task, df: pd.DataFrame) -> Grader:
     
     expected_answer = task.answer(df)
@@ -49,17 +51,12 @@ def grade(generated_result: ExecutionResult, task: Task, df: pd.DataFrame) -> Gr
         obtained_answer = generated_result.stdout.strip()
         if isinstance(expected_answer, (float, np.floating)):
             try:
-                if math.isclose(expected_answer, float(obtained_answer)):
-                    correctness = True
-                else:
-                    correctness = False
+                correctness = math.isclose(expected_answer, float(obtained_answer))
             except ValueError:
                 correctness = False
         else:
-            if expected_answer == obtained_answer:
-                correctness = True
-            else:
-                correctness = False
+            correctness = (expected_answer == obtained_answer)
+            
     return Grader(
         correct=correctness,
         expected_answer=expected_answer,
