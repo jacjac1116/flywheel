@@ -8,7 +8,6 @@ sandbox_system_prompt: |
   Sandbox environment:
 
   - The current working directory contains the data file:
-      {data_file}
   - No modules have been imported.
   - No environment variables are available.
   - Internet access is disabled.
@@ -55,8 +54,7 @@ sandbox_system_prompt: |
   - Do not print labels, explanations, markdown, or any additional text.
   - Do not request user input.
   - Do not assume any files exist other than the provided data file.
-  - Output only executable Python code.
-  - Do not wrap the code in markdown fences.
+  - Write standard Python using only real, importable libraries (e.g. pandas). Present it as one fenced code block.
 
   Correct examples of the final line of the script:
 
