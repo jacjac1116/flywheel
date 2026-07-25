@@ -1,5 +1,6 @@
 import pytest
 import pandas as pd
+import numpy as np
 from analyst_agent.core import get_configs
 from analyst_agent.tasks import Task, grade
 from analyst_agent.sandbox import ExecutionResult
@@ -29,6 +30,81 @@ def string_task():
         question="Dummy string task",
         answer=lambda df: "moderate"
     )
+
+@pytest.fixture
+def int_task():
+    return Task(
+        id=3,
+        tier=1,
+        question="Dummy int task",
+        answer=lambda df: np.int64(9)
+    )
+
+@pytest.fixture
+def timestamp_task():
+
+    return Task(
+        id=1,
+        tier=4,
+        question="Dummy timestamp task",
+        answer=lambda df: pd.Timestamp("2020-01-01 00:00:00", tz="UTC")
+    )
+
+def test_grade_correct_timestamp_aware(df, timestamp_task):
+
+    result = ExecutionResult(
+        success=True,
+        stdout="2020-01-01 00:00:00+00:00",
+        stderr="",
+        timed_out=False,
+        code='print("2020-01-01 00:00:00+00:00")'
+    )
+
+    graded = grade(result, timestamp_task, df)
+
+    assert graded.correct
+
+def test_grade_correct_timestamp_naive(df, timestamp_task):
+
+    result = ExecutionResult(
+        success=True,
+        stdout="2020-01-01 00:00:00",
+        stderr="",
+        timed_out=False,
+        code='print("2020-01-01 00:00:00")'
+    )
+
+    graded = grade(result, timestamp_task, df)
+
+    assert graded.correct
+
+def test_grade_wrong_timestamp(df, timestamp_task):
+
+    result = ExecutionResult(
+        success=True,
+        stdout="2020-06-15 12:00:00+00:00",
+        stderr="",
+        timed_out=False,
+        code='print("2020-06-15 12:00:00+00:00")'
+    )
+
+    graded = grade(result, timestamp_task, df)
+
+    assert not graded.correct
+
+def test_grade_invalid_timestamp(df, timestamp_task):
+
+    result = ExecutionResult(
+        success=True,
+        stdout="hello",
+        stderr="",
+        timed_out=False,
+        code='print("hello")'
+    )
+
+    graded = grade(result, timestamp_task, df)
+
+    assert not graded.correct
 
 def test_grade_correct_float(df, float_task):
 
@@ -99,6 +175,34 @@ def test_grade_incorrect_string(df, string_task):
     graded = grade(result, string_task, df)
 
     assert not graded.correct
+
+def test_grade_correct_int(df, int_task):
+
+    result = ExecutionResult(
+        success=True,
+        stdout="9.0",
+        stderr="",
+        timed_out=False,
+        code="print(9.0)"
+    )
+
+    graded = grade(result, int_task, df)
+
+    assert graded.correct
+
+def test_grade_incorrect_int(df, int_task):
+    result = ExecutionResult(
+        success=True,
+        stdout="9.5",
+        stderr="",
+        timed_out=False,
+        code="print(9.5)"
+    )
+
+    graded = grade(result, int_task, df)
+
+    assert not graded.correct
+
 
 def test_grade_runtime_error(df, float_task):
 

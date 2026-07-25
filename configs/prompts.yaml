@@ -36,7 +36,7 @@ sandbox_system_prompt: |
       Meaning: measured carbon intensity.
 
   - index
-      dtype: string
+      dtype: str
       Meaning: carbon intensity category.
       Possible values include: "very low", "low", "moderate", "high", and "very high".
 
