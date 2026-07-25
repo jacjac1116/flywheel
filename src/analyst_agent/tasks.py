@@ -155,11 +155,8 @@ def grade(generated_result: ExecutionResult, task: Task, df: pd.DataFrame) -> Gr
 
 if __name__ == '__main__':
 
-    path = here() / 'data' / 'raw' / 'carbon_2020-01-01_2025-12-31.parquet'
-    df = pd.read_parquet(path)
-
-    for t in tasks:
-        print(t.id, t.answer(df))
+    from analyst_agent.core import get_configs
+    df = pd.read_parquet(get_configs()['carbon_data'])
     
     code="""
 import pandas as pd
