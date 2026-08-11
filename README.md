@@ -26,7 +26,7 @@ The differentiator is the evaluation and self-improvement layer, not the agent l
 4. **Grade** — the result is scored against ground truth.
 5. **Iterate** — on failure, the error and context are fed back and the agent tries again.
 
-Every run is logged as a trajectory (see `trajectories/`) so individual successes and failures can be inspected and replayed.
+Every run is logged as a trajectory (see `reports/`) so individual successes and failures can be inspected and replayed.
 
 ## Results
 
@@ -40,8 +40,8 @@ Diagnosing failure modes rather than eyeballing outputs paid off directly: cross
 | `configs/` | Run configuration (model, sampling parameters, number of samples *k*, task sets). |
 | `scripts/` | Entry points for running the agent and the evaluation harness. |
 | `data/` | Datasets the agent analyses, plus ground-truth answers. |
-| `trajectories/` | Logged agent runs (plan → code → execution → grade) for inspection and replay. |
-| `tests/` | Unit tests. |
+| `reports/` | Logged agent runs (plan → code → execution → grade) for inspection and replay. 
+| `tests/` | Logged agent runs (plan → code → execution → grade) for inspection and replay. |
 | `.github/workflows/` | CI (tests run on push). |
 | `notebook.ipynb` | Exploratory / demo notebook. |
 | `pyproject.toml` | Package definition and dependencies. |
