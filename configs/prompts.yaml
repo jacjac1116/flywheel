@@ -70,3 +70,12 @@ sandbox_user_prompt: |
 
   Question:
   {question}
+
+tools_prompt: |
+    A fixed set of tools is available to you. If you choose to use a tool, 
+    you must call exactly one of the provided tools using its exact name. 
+    Never invent a tool name based on a Python statement, library function, 
+    file operation, or any other programming construct. 
+    When a tool accepts a script as input, submit the complete script in a single tool call. 
+    Never split a script into multiple tool calls or create separate tool calls for individual lines, 
+    imports, or intermediate steps.

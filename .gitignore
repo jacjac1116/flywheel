@@ -12,4 +12,8 @@ data/*
 !data/.gitkeep
 
 trajectories/*
-!trajectories/.gitkeep*.sh # or just Miniforge3-MacOSX-arm64.sh if you want to be narrower
+!trajectories/.gitkeep
+*.sh 
+
+reports/*
+!reports/evaluation_2026-08-12_19-30-31.json

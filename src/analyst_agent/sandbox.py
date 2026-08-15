@@ -12,8 +12,9 @@ class ExecutionResult:
     stderr: str 
     timed_out: bool
     code: str
+    
 
-def run_code(code: str, timeout: int) -> ExecutionResult:
+def run_code(code: str, timeout: int = 5) -> ExecutionResult:
 
     with tempfile.TemporaryDirectory() as scratch_dir:
 

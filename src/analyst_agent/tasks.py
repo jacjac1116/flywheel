@@ -108,7 +108,47 @@ task12 = Task(
     answer=lambda df: df.loc[np.abs(df['forecast'] - df['actual']).idxmax()]['from']
 )
 
-tasks = [task1, task2, task3, task4, task5, task6, task7, task8, task9, task10, task11, task12]
+task13 = Task(
+    id=13,
+    tier=3,
+    question='What is the average forecast carbon intensity during periods classified as "high" where the actual carbon intensity exceeded 200?',
+    answer=lambda df: df[(df["index"] == "high") & (df["actual"] > 200)]["forecast"].mean()
+)
+
+
+task14 = Task(
+    id=15,
+    tier=3,
+    question='What was the average forecast carbon intensity during January 2025?',
+    answer=lambda df: df[(df["from"].dt.year == 2025) &(df["from"].dt.month == 1)]["forecast"].mean()
+)
+
+
+task15 = Task(
+    id=16,
+    tier=2,
+    question='How many settlement periods have missing actual carbon intensity values?',
+    answer=lambda df: df["actual"].isna().sum()
+)
+
+
+task16 = Task(
+    id=17,
+    tier=3,
+    question='What percentage of settlement periods had a forecast carbon intensity higher than the actual carbon intensity?',
+    answer=lambda df: ((df["forecast"] > df["actual"]).sum() / len(df)) * 100
+)
+
+
+task17 = Task(
+    id=18,
+    tier=4,
+    question='What was the highest 24-hour rolling average forecast carbon intensity?',
+    answer=lambda df: df.sort_values("from").set_index("from")["forecast"].rolling("24h").mean().max()
+)
+
+tasks = [task1, task2, task3, task4, task5, task6, task7, task8, task9, task10, task11, task12, task13, task14, task15, task16, task17]
+train = [task1, task2, task3, task4, task5, task6, task7, task8, task9, task10, task11, task12]
 
 def grade(generated_result: ExecutionResult, task: Task, df: pd.DataFrame) -> Grader:
     
