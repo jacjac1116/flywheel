@@ -6,6 +6,7 @@ def agent():
     a = Agent.__new__(Agent)
     a.user_prompt = "File: {data_file}\nQ: {question}"
     a.system_prompt = "You write pandas."
+    a.tools_prompt = "No tools"
     a.configs = {'carbon_data': type('P', (), {'name': 'carbon_sample.parquet'})()}
     return a
 

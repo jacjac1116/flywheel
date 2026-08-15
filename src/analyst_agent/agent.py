@@ -22,6 +22,47 @@ class Output:
     raw: str
     code: str | None
 
+def build_messages(question: str, no_think: bool, user_prompt: str, data_file: str, system_prompt: str, tools_prompt: str, tools: object = None) -> list[dict[str, str]]:
+    """
+    Construct the chat messages sent to the language model.
+
+    Args:
+        question: The user's analytical question.
+        no_think: Whether to append the `/no_think` directive to the user prompt.
+        user_prompt: The template used to construct the user message. It must
+            contain placeholders for `data_file` and `question`.
+        data_file: The path or name of the data file to include in the user prompt.
+        system_prompt: The system message content.
+        tools_prompt: Instructions describing the available tools, appended when
+            tools are provided.
+        tools: Optional tools available to the language model.
+
+    Returns:
+        A list of chat messages containing the system and user messages,
+        formatted for the MLX tokenizer.
+    """
+
+    # Build the user prompt using the configured data file
+    user_prompt = user_prompt.format(
+        data_file=data_file,
+        question=question
+    )
+
+    # Optionally append the tools rule
+    if tools is not None:
+        user_prompt = f"{user_prompt}\n{tools_prompt}"
+
+    # Optionally append the /no_think directive
+    if no_think:
+        user_prompt = f"{user_prompt} /no_think"
+
+    msgs = [
+        {'role': 'system', 'content': system_prompt},
+        {'role': 'user', 'content': user_prompt}
+    ]
+
+    return msgs
+
 
 class Agent:
     """
@@ -57,39 +98,17 @@ class Agent:
         # Load project configuration
         self.configs = get_configs()
 
-
     def _build_messages(self, question: str, no_think: bool, tools: object = None) -> list[dict[str, str]]:
-        """
-        Construct the chat messages sent to the language model.
-
-        Args:
-            question: User's analytical question.
-            no_think: Whether to append the /no_think directive.
-
-        Returns:
-            List of chat messages formatted for the MLX tokenizer.
-        """
-
-        # Build the user prompt using the configured data file
-        user_prompt = self.user_prompt.format(
+        return build_messages(
+            question=question,
+            no_think=no_think,
+            user_prompt=self.user_prompt,
             data_file=self.configs['carbon_data'].name,
-            question=question
+            system_prompt=self.system_prompt,
+            tools_prompt=self.tools_prompt,
+            tools=tools
         )
 
-        # Optionally append the tools rule
-        if tools is not None:
-            user_prompt = f"{user_prompt}\n{self.tools_prompt}"
-
-        # Optionally append the /no_think directive
-        if no_think:
-            user_prompt = f"{user_prompt} /no_think"
-
-        msgs = [
-            {'role': 'system', 'content': self.system_prompt},
-            {'role': 'user', 'content': user_prompt}
-        ]
-
-        return msgs
 
 
     def generate(self, no_think: bool, question: str | None = None, max_tokens: int = 1000, temp: float = 0.0, tools: list[dict] | None = None, messages: list[dict] | None = None) -> str:
