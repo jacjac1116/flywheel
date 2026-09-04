@@ -1,5 +1,5 @@
 from analyst_agent.core import get_configs
-from analyst_agent import Agent, tasks, Solved, ExecutionFail, ExtractionFail, GenuineMiss, solve_task, train, run_task, Task
+from analyst_agent import Agent, tasks, Solved, ExecutionFail, ExtractionFail, GenuineMiss, solve_task, train, run_task, Task, test
 import pandas as pd
 import logging
 import json
@@ -118,6 +118,7 @@ def run_round(
         tool_use: bool,
         no_think: bool = True,
         model: str = "Qwen/Qwen3-1.7B",
+        adapter_path : str| None = None,
         save: bool = True
 ):
 
@@ -137,7 +138,7 @@ def run_round(
         solve_rate: Overall success percentage
     """
 
-    agent = Agent(model)
+    agent = Agent(model, adapter_path)
 
     df = pd.read_parquet(get_configs()['carbon_data'] )
 
@@ -250,6 +251,6 @@ if __name__ == "__main__":
 
     for i in range(1):
 
-        results, overall, rate = run_round(k=32, temp=0.7, task_list=train, tool_use=False)
+        results, overall, rate = run_round(k=32, temp=0.7, task_list=test, tool_use=False, adapter_path='adapters/round1')
 
         print(f"Run {i}: {rate:.1%}")

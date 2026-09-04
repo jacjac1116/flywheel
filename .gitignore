@@ -17,4 +17,6 @@ trajectories/*
 
 reports/*
 !reports/evaluation_2026-08-12_19-30-31.json
+!reports/evaluation_2026-09-02_22-46-16.json
+
 notebook.ipynb

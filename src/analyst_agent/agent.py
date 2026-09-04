@@ -76,7 +76,7 @@ class Agent:
     - Extracting executable Python code from the model output.
     """
 
-    def __init__(self, model):
+    def __init__(self, model, adapter_path: str | None = None):
         """
         Initialise the agent.
 
@@ -85,7 +85,7 @@ class Agent:
         """
 
         # Load MLX model and tokenizer
-        self.model, self.tokenizer = load(model)
+        self.model, self.tokenizer = load(model, adapter_path = adapter_path)
 
         # Load system and user prompts
         with open(here() / 'configs' / 'prompts.yaml') as f:

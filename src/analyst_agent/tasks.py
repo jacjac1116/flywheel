@@ -117,7 +117,7 @@ task13 = Task(
 
 
 task14 = Task(
-    id=15,
+    id=14,
     tier=3,
     question='What was the average forecast carbon intensity during January 2025?',
     answer=lambda df: df[(df["from"].dt.year == 2025) &(df["from"].dt.month == 1)]["forecast"].mean()
@@ -125,7 +125,7 @@ task14 = Task(
 
 
 task15 = Task(
-    id=16,
+    id=15,
     tier=2,
     question='How many settlement periods have missing actual carbon intensity values?',
     answer=lambda df: df["actual"].isna().sum()
@@ -133,7 +133,7 @@ task15 = Task(
 
 
 task16 = Task(
-    id=17,
+    id=16,
     tier=3,
     question='What percentage of settlement periods had a forecast carbon intensity higher than the actual carbon intensity?',
     answer=lambda df: ((df["forecast"] > df["actual"]).sum() / len(df)) * 100
@@ -141,7 +141,7 @@ task16 = Task(
 
 
 task17 = Task(
-    id=18,
+    id=17,
     tier=4,
     question='What was the highest 24-hour rolling average forecast carbon intensity?',
     answer=lambda df: df.sort_values("from").set_index("from")["forecast"].rolling("24h").mean().max()
@@ -149,6 +149,7 @@ task17 = Task(
 
 tasks = [task1, task2, task3, task4, task5, task6, task7, task8, task9, task10, task11, task12, task13, task14, task15, task16, task17]
 train = [task1, task2, task3, task4, task5, task6, task7, task8, task9, task10, task11, task12]
+test = [task13, task14, task15, task16, task17]
 
 def grade(generated_result: ExecutionResult, task: Task, df: pd.DataFrame) -> Grader:
     
